@@ -1,0 +1,33 @@
+<form method="post">
+
+    {% csrf_token %}
+
+    <div class="mb-3">
+        {{ form.loan_amount.label_tag }}
+        {{ form.loan_amount }}
+        <div class="text-danger">{{ form.loan_amount.errors }}</div>
+    </div>
+
+    <div class="mb-3">
+        {{ form.annual_interest_rate.label_tag }}
+        {{ form.annual_interest_rate }}
+        <div class="text-danger">{{ form.annual_interest_rate.errors }}</div>
+    </div>
+
+    <div class="mb-3">
+        {{ form.loan_tenure.label_tag }}
+        {{ form.loan_tenure }}
+        <div class="text-danger">{{ form.loan_tenure.errors }}</div>
+    </div>
+
+    <div class="mb-4">
+        {{ form.tenure_type.label_tag }}
+        {{ form.tenure_type }}
+        <div class="text-danger">{{ form.tenure_type.errors }}</div>
+    </div>
+
+    <button class="btn btn-primary w-100" type="submit">
+        Calculate EMI
+    </button>
+
+</form>

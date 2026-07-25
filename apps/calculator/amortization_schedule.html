@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}
+Amortization Schedule
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2>
+            Amortization Schedule
+        </h2>
+
+        <a href="{% url 'history' %}" class="btn btn-secondary">
+            Back
+        </a>
+
+    </div>
+
+    <div class="card shadow">
+
+        <div class="card-body table-responsive">
+
+            <table class="table table-striped table-hover">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Month</th>
+                        <th>EMI</th>
+                        <th>Principal</th>
+                        <th>Interest</th>
+                        <th>Balance</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for row in schedule %}
+
+                    <tr>
+
+                        <td>{{ row.month }}</td>
+                        <td>₹ {{ row.emi }}</td>
+                        <td>₹ {{ row.principal }}</td>
+                        <td>₹ {{ row.interest }}</td>
+                        <td>₹ {{ row.balance }}</td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

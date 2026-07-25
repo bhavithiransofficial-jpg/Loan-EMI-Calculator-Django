@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}
+Calculation Details
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+
+            <h3>Loan Details</h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <table class="table">
+
+                <tr>
+                    <th>Loan Amount</th>
+                    <td>₹ {{ calculation.loan_amount }}</td>
+                </tr>
+
+                <tr>
+                    <th>Interest Rate</th>
+                    <td>{{ calculation.annual_interest_rate }}%</td>
+                </tr>
+
+                <tr>
+                    <th>Tenure</th>
+                    <td>{{ calculation.loan_tenure }} {{ calculation.tenure_type }}</td>
+                </tr>
+
+                <tr>
+                    <th>Monthly EMI</th>
+                    <td>₹ {{ calculation.monthly_emi }}</td>
+                </tr>
+
+                <tr>
+                    <th>Total Interest</th>
+                    <td>₹ {{ calculation.total_interest }}</td>
+                </tr>
+
+                <tr>
+                    <th>Total Payment</th>
+                    <td>₹ {{ calculation.total_payment }}</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

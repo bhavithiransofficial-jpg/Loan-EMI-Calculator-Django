@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}
+Compare Loans
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h2 class="mb-4 text-center">
+        Compare Two Loans
+    </h2>
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        {{ form.loan_amount.label_tag }}
+                        {{ form.loan_amount }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        {{ form.tenure.label_tag }}
+                        {{ form.tenure }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        {{ form.interest_rate_1.label_tag }}
+                        {{ form.interest_rate_1 }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        {{ form.interest_rate_2.label_tag }}
+                        {{ form.interest_rate_2 }}
+                    </div>
+
+                </div>
+
+                <button class="btn btn-primary w-100">
+                    Compare Loans
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    {% if comparison %}
+
+    <div class="card mt-5 shadow-sm">
+
+        <div class="card-header bg-success text-white">
+
+            <h4 class="mb-0">
+                Comparison Result
+            </h4>
+
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-bordered table-striped">
+
+                <thead class="table-dark">
+
+                    <tr>
+                        <th>Details</th>
+                        <th>Loan A</th>
+                        <th>Loan B</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>Monthly EMI</td>
+                        <td>₹ {{ comparison.loan_a.monthly_emi }}</td>
+                        <td>₹ {{ comparison.loan_b.monthly_emi }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Total Interest</td>
+                        <td>₹ {{ comparison.loan_a.total_interest }}</td>
+                        <td>₹ {{ comparison.loan_b.total_interest }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Total Payment</td>
+                        <td>₹ {{ comparison.loan_a.total_payment }}</td>
+                        <td>₹ {{ comparison.loan_b.total_payment }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Repayment Period</td>
+                        <td>{{ comparison.loan_a.months }} Months</td>
+                        <td>{{ comparison.loan_b.months }} Months</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

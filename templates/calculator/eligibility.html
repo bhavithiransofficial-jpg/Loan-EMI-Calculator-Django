@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+
+{% block title %}
+Loan Eligibility Calculator
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-lg">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h3 class="mb-0">
+                        Loan Eligibility Calculator
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form method="post">
+
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+
+                            {{ form.monthly_income.label_tag }}
+                            {{ form.monthly_income }}
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            {{ form.monthly_expenses.label_tag }}
+                            {{ form.monthly_expenses }}
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            {{ form.annual_interest_rate.label_tag }}
+                            {{ form.annual_interest_rate }}
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            {{ form.tenure.label_tag }}
+                            {{ form.tenure }}
+
+                        </div>
+
+                        <button
+                            class="btn btn-primary w-100 btn-lg">
+
+                            <i class="bi bi-calculator"></i>
+
+                            Calculate Eligibility
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% if result %}
+
+    <div class="row justify-content-center mt-5">
+
+        <div class="col-lg-10">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-success text-white">
+
+                    <h4 class="mb-0">
+
+                        Eligibility Result
+
+                    </h4>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row g-4">
+
+                        <div class="col-md-4">
+
+                            <div class="card border-primary">
+
+                                <div class="card-body text-center">
+
+                                    <i class="bi bi-wallet2 display-5 text-primary"></i>
+
+                                    <h6 class="mt-3">
+
+                                        Monthly Income
+
+                                    </h6>
+
+                                    <h3>
+
+                                        ₹ {{ result.income }}
+
+                                    </h3>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <div class="card border-danger">
+
+                                <div class="card-body text-center">
+
+                                    <i class="bi bi-cash-stack display-5 text-danger"></i>
+
+                                    <h6 class="mt-3">
+
+                                        Monthly Expenses
+
+                                    </h6>
+
+                                    <h3>
+
+                                        ₹ {{ result.expenses }}
+
+                                    </h3>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <div class="card border-success">
+
+                                <div class="card-body text-center">
+
+                                    <i class="bi bi-piggy-bank display-5 text-success"></i>
+
+                                    <h6 class="mt-3">
+
+                                        Disposable Income
+
+                                    </h6>
+
+                                    <h3>
+
+                                        ₹ {{ result.disposable_income }}
+
+                                    </h3>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row mt-4 g-4">
+
+                        <div class="col-md-6">
+
+                            <div class="card border-warning">
+
+                                <div class="card-body text-center">
+
+                                    <i class="bi bi-credit-card display-5 text-warning"></i>
+
+                                    <h6 class="mt-3">
+
+                                        Maximum EMI You Can Afford
+
+                                    </h6>
+
+                                    <h2>
+
+                                        ₹ {{ result.eligible_emi }}
+
+                                    </h2>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="card border-info">
+
+                                <div class="card-body text-center">
+
+                                    <i class="bi bi-bank display-5 text-info"></i>
+
+                                    <h6 class="mt-3">
+
+                                        Estimated Eligible Loan Amount
+
+                                    </h6>
+
+                                    <h2>
+
+                                        ₹ {{ result.eligible_amount }}
+
+                                    </h2>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

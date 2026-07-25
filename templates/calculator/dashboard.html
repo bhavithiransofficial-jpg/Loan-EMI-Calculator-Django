@@ -1,0 +1,366 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h2 class="mb-4 fw-bold">
+        Dashboard
+    </h2>
+
+    <!-- Statistics Cards -->
+
+    <div class="row g-4">
+
+        <div class="col-md-3">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Total Calculations
+                    </h6>
+
+                    <h2 class="text-primary fw-bold">
+                        {{ total_calculations }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Total Loan Amount
+                    </h6>
+
+                    <h2 class="text-success fw-bold">
+                        ₹ {{ total_loan_amount }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Total Interest
+                    </h6>
+
+                    <h2 class="text-danger fw-bold">
+                        ₹ {{ total_interest }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Average EMI
+                    </h6>
+
+                    <h2 class="text-warning fw-bold">
+                        ₹ {{ average_emi }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Charts -->
+
+    <div class="row mt-5">
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h5 class="mb-0">
+                        EMI Statistics
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <canvas id="emiChart" height="300"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-success text-white">
+
+                    <h5 class="mb-0">
+                        Principal vs Interest
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <canvas id="loanChart" height="300"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Recent Calculations -->
+
+    <div class="card shadow border-0 mt-4">
+
+        <div class="card-header bg-dark text-white">
+
+            <h5 class="mb-0">
+                Recent Calculations
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th>Date</th>
+                            <th>Loan Amount</th>
+                            <th>Monthly EMI</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for item in recent_calculations %}
+
+                        <tr>
+
+                            <td>
+                                {{ item.created_at|date:"d M Y" }}
+                            </td>
+
+                            <td>
+                                ₹ {{ item.loan_amount }}
+                            </td>
+
+                            <td>
+                                ₹ {{ item.monthly_emi }}
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td colspan="3" class="text-center">
+
+                                No calculations available.
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const totalLoan = parseFloat("{{ total_loan_amount|default_if_none:0 }}".replace(/,/g, "")) || 0;
+
+    const totalInterest = parseFloat("{{ total_interest|default_if_none:0 }}".replace(/,/g, "")) || 0;
+
+    const averageEmi = parseFloat("{{ average_emi|default_if_none:0 }}".replace(/,/g, "")) || 0;
+
+    console.log("Loan:", totalLoan);
+    console.log("Interest:", totalInterest);
+    console.log("Average EMI:", averageEmi);
+
+    const emiCanvas = document.getElementById("emiChart");
+
+    if (emiCanvas) {
+
+        new Chart(emiCanvas, {
+
+            type: "bar",
+
+            data: {
+
+                labels: [
+
+                    "Loan Amount",
+                    "Interest",
+                    "Average EMI"
+
+                ],
+
+                datasets: [
+
+                    {
+
+                        label: "Amount (₹)",
+
+                        data: [
+
+                            totalLoan,
+                            totalInterest,
+                            averageEmi
+
+                        ],
+
+                        backgroundColor: [
+
+                            "#0d6efd",
+                            "#dc3545",
+                            "#ffc107"
+
+                        ]
+
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    }
+
+    const loanCanvas = document.getElementById("loanChart");
+
+    if (loanCanvas) {
+
+        new Chart(loanCanvas, {
+
+            type: "doughnut",
+
+            data: {
+
+                labels: [
+
+                    "Principal",
+                    "Interest"
+
+                ],
+
+                datasets: [
+
+                    {
+
+                        data: [
+
+                            totalLoan,
+                            totalInterest
+
+                        ],
+
+                        backgroundColor: [
+
+                            "#198754",
+                            "#dc3545"
+
+                        ]
+
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false
+
+            }
+
+        });
+
+    }
+
+});
+
+</script>
+
+{% endblock %}
